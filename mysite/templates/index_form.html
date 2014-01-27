@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<style type = "text/css">
+		    div#header{
+		       background-color: #99bbbb;
+		    }
+			div#content{
+			   background-color: #EEEEEE;
+			}
+		</style>
+		<title>Django XSS Sanitization Capability Test</title>
+	</head>
+
+	<body>
+	<p><b> Main Page <b></p>
+	<div id = "header" align = "center">
+		<table cellpadding = "50">
+			<tr>
+				<td><a href = "xss0">Django's Server-Side XSS Test</a></td>
+			</tr>
+			<tr>
+				<td><a href = "xss1">Django's Autoescaping Plain Output Test</a></td>
+            </tr>
+            <tr>
+				<td><a href = "xss2">Django's Autoescaping Embedded Test</a></td>
+            </tr>
+		</table>
+	</div>
+
+	<p>Author: jz33@rice.edu</p>
+	</body>
+</html>

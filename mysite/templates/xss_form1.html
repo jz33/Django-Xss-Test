@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+	<head> 
+	    <title>Django's Autoescaping Plain Output Test</title>
+
+	    <style type = "text/css">
+	        body {
+	         background-color: #EEEEEE;
+	          position: relative;
+	          left: 250px;
+	          overflow: scroll;
+	        }
+	        li {
+	          font-weight: bold;
+	        }
+		</style>
+		
+		<script language = "javascript">
+			function showText(arg) {
+				document.getElementById("q").value = arg.value;
+			}
+		</script>
+	</head>
+<body>
+		<h3>Django's Autoescaping Plain Output Test</h3>
+        <h4><font color = "green">Default test with auto-escaping off</font></h4>
+		<!--{% autoescape off %}-->
+		
+		<form action = "" method = "get">
+			<input type = "text" name = "q" id = "q">
+			<input type = "submit" value = "submit">
+		</form>
+
+		<hr />
+		
+		<ol>
+		<hr/>
+		<li>Alert Box 01 <input type = "button" name = "b" onclick = "showText(this)" 
+		                      value = "<script>alert(1)</script>">
+		<br/>Alert Box 02 <input type = "button" name = "b" onclick = "showText(this)" 
+		                      value = "javascript:alert(1);"></li>
+		<li>Image tags<input type = "button" name = "b" onclick = "showText(this)" 
+		                      value = "<IMG &quot;&quot;&quot;><SCRIPT>alert(1)</SCRIPT>&quot;>"></li>
+		<li>Style sheet<input type = "button" name = "b" onclick = "showText(this)" 
+		                      value = "<LINK REL=&quot;stylesheet&quot; HREF=javascript:alert(1)>"></li>
+		<li>
+		   Bold Font<input type = "button" name = "b" onclick = "showText(this)" value = "<b>"><br/>
+		   Italic Font<input type = "button" name = "b" onclick = "showText(this)" value = "<i>">
+		</li>
+		</ol>
+		<hr />
+		
+		{% if query %}
+			Query: {{query}} <br/>
+			Full_path:{{full_path}} <br/>
+		{% endif %}
+		
+        <!--{% endautoescape %}-->
+        
+<!-- Buttom-->
+<span>Author: jz33@rice.edu</span><br/>
+<span>References: </span><br/>
+<ol>
+<li><a href= "https://www.owasp.org/index.php/XSS_Filter_Evasion_Cheat_Sheet#XSS_Locator">OWASP XSS Filter Evasion Cheat Sheet</a></li>
+<li><a href= "http://owasp-esapi-python-swingset.appspot.com/xss/django">OWASP ESAPI SwingSet Sheet</a></li>
+</ol>
+</body>
+</html>

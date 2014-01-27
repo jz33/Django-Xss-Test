@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head> 
+    <title>Django's Autoescaping Comprehensive Test</title>
+	    <style type = "text/css">
+	        body {
+	          background-color: #EEEEEE;
+	          position: relative;
+	          left: 250px;
+	          overflow: scroll;
+	        }
+	        li {
+	          font-weight: bold;
+	        }
+	        input[type=submit]{
+	           width: 100px;
+	        }
+		</style>	
+		<script language = "javascript">
+			function showText(arg) {
+				document.getElementById("q").value = arg.value;
+			}
+		</script>
+	</head>
+<body>
+
+<h3>Django's Autoescaping Embedded Test</h3>
+<h4><font color = "green">Default test with autoescape on</font></h4>
+		
+		<!--
+	<form action = "" method = "get">
+		<input type = "submit" value = "ON" name = "auto_on">
+	</form>
+	-->
+	   {% autoescape on %}
+		
+<!-- Test Cases -->
+    <ol>
+    <li>Inject alert to &lt;button &gt; via "onclick=" <br/>
+      <input type = "button" name = "b" onclick = "showText(this)" value = "alert(&quot;XSS!&quot;);"><br/>
+       onclick= unquoted: {% if query %}<button onclick ={{xss}}><font color = "red">Click!</font></button>{% endif %}<br/>
+       onclick= quoted:   {% if query %}<button onclick ={{"xss"}}><font color = "red">Click!</font></button>{% endif %}
+    </li><hr/>
+   
+    <li>Inject alert to properties "class", "style", "href" via "class onmouseover=" <i>[1]</i><br/>
+      <input type = "button" name = "b" onclick = "showText(this)" value = "class1 onmouseover=javascript:alert(1);"><br/>
+        
+        class= unquoted: <span class = {% if query %}{{xss}}{% endif %}><font color = "red">Move mouse here...</font></span><br/>
+       
+        style= unquoted: <span style = {% if query %}{{xss}}{% endif %}><font color = "red">Move mouse here...</font></span><br/>
+        style= quoted:   <span style = {% if query %}{{"xss"}}{% endif %}><font color = "red">Move mouse here...</font></span><br/>
+        
+        href= unquoted: <a href = {% if query %}{{xss}}{% endif %}><font color = "red">Move mouse here...</font></a><br/>
+        href= quoted:   <a href = {% if query %}{{"xss"}}{% endif %}><font color = "red">Move mouse here...</font></a>
+    </li><hr/>
+
+    <li>Inject alert to &lt;img &gt; via "onclick="<br/>
+      onclick= unquoted: <input type = "button" name = "b" onclick = "showText(this)" value = "50+alert(1)"><br/>
+      <img src= "img/OWASP.png" onclick = "var i= {% if query %}{{xss}}{% endif %}"><br/>
+      onclick= quoted: <input type = "button" name = "b" onclick = "showText(this)" value = "50';alert(1);'"><br/>
+      <img src= "img/OWASP.png" onclick = "var i='{% if query %}{{xss}}{% endif %}'">
+    </li><hr/>
+    
+    <li>Inject non-script html properties, e.g., &lt; b &gt; <i>[2]</i><br/>
+      <input type = "button" name = "b" onclick = "showText(this)" value = "<b>">
+    </li><hr/>
+    </ol>
+    
+<!-- Query input/output Form-->
+    <form action = "" method = "get">
+		<input type = "text" name = "q" id = "q" size = 100>
+		<input type = "submit" value = "submit">
+	</form>
+	<hr/>
+	<p>
+	    Current Query: {{query}}<br/>
+        URL Full Path: {{full_path}}<br/>
+    </p>
+
+    {% endautoescape %}
+
+<!-- Buttom-->
+<hr/>
+<p>
+[1] Only working on "onmouseover", working on key event (onkeypress, etc.) <br/>
+[2] If "autoescape" is off, later output becomes bold
+</p>
+<span>Author: jz33@rice.edu</span><br/>
+<span>References: </span><br/>
+<ol>
+<li><a href= "https://www.owasp.org/index.php/XSS_Filter_Evasion_Cheat_Sheet#XSS_Locator">OWASP XSS Filter Evasion Cheat Sheet</a></li>
+<li><a href= "http://owasp-esapi-python-swingset.appspot.com/xss/django">OWASP ESAPI SwingSet Sheet</a></li>
+</ol>
+</body>
+</html>
